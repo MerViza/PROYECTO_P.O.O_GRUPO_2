@@ -139,7 +139,10 @@ public class FormLogin extends javax.swing.JFrame {
                 this,
                 "Inicio de sesión correcto. Bienvenido "
                 + usuario.getUsuario()
+                       
         );
+        new FormMain().setVisible(true);
+        this.dispose();
 
     } else {
 

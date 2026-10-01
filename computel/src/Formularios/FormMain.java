@@ -44,9 +44,19 @@ public class FormMain extends javax.swing.JFrame {
 
         menuProductos.setText("Productos");
         menuProductos.setAlignmentX(1.0F);
+        menuProductos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                menuProductosMouseClicked(evt);
+            }
+        });
         menuMain.add(menuProductos);
 
         menuInventario.setText("Inventarios");
+        menuInventario.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                menuInventarioMouseClicked(evt);
+            }
+        });
         menuMain.add(menuInventario);
 
         menuVentas.setText("Ventas");
@@ -70,6 +80,18 @@ public class FormMain extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void menuProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuProductosMouseClicked
+        // TODO add your handling code here:
+        
+        new FormProductos().setVisible(true);
+    }//GEN-LAST:event_menuProductosMouseClicked
+
+    private void menuInventarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuInventarioMouseClicked
+        
+        new FormInventarios().setVisible(true);
+        // TODO add your handling code here:
+    }//GEN-LAST:event_menuInventarioMouseClicked
 
     /**
      * @param args the command line arguments

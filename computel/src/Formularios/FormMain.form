@@ -9,11 +9,17 @@
             <Property name="text" type="java.lang.String" value="Productos"/>
             <Property name="alignmentX" type="float" value="1.0"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="menuProductosMouseClicked"/>
+          </Events>
         </Menu>
         <Menu class="javax.swing.JMenu" name="menuInventario">
           <Properties>
             <Property name="text" type="java.lang.String" value="Inventarios"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="menuInventarioMouseClicked"/>
+          </Events>
         </Menu>
         <Menu class="javax.swing.JMenu" name="menuVentas">
           <Properties>
