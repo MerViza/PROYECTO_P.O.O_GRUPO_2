@@ -3,7 +3,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Formularios;
-
+import javax.swing.JOptionPane;
+import modelo.Producto;
+import modelo.ProductoDAO;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author jeremy
@@ -11,14 +15,41 @@ package Formularios;
 public class FormProductos extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FormProductos.class.getName());
-
+    private final ProductoDAO productoDAO = new ProductoDAO();
     /**
      * Creates new form FormProductos
      */
     public FormProductos() {
         initComponents();
+        cargarTabla();
+    }
+    
+    private void limpiarCampos() {
+    txtCodigo.setText("");
+    txtNombre.setText("");
+    txtCantidad.setText("");
+    txtPrecio.setText("");
+    txtCodigo.requestFocus();
+    
+}
+    private void mostrarEnTabla(List<Producto> lista) {
+    DefaultTableModel modelo = (DefaultTableModel) tablaProductos.getModel();
+    modelo.setRowCount(0); // borra las filas anteriores (incluidas las 4 vacías del diseñador)
+
+    for (Producto p : lista) {
+        modelo.addRow(new Object[] {
+            p.getCodigo(),
+            p.getNombre(),
+            p.getCantidad(),
+            p.getPrecio()
+        });
+        }
     }
 
+    private void cargarTabla() {
+        mostrarEnTabla(productoDAO.listar());
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -46,7 +77,7 @@ public class FormProductos extends javax.swing.JFrame {
         btnOrdenar = new javax.swing.JButton();
         btnConfirmar3 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         txtNombre.addActionListener(this::txtNombreActionPerformed);
 
@@ -65,6 +96,7 @@ public class FormProductos extends javax.swing.JFrame {
         jLabel5.setText("Precio");
 
         btnConfirmar.setText("Confirmar");
+        btnConfirmar.addActionListener(this::btnConfirmarActionPerformed);
 
         tablaProductos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -78,7 +110,7 @@ public class FormProductos extends javax.swing.JFrame {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                true, true, false, false
+                false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -86,6 +118,18 @@ public class FormProductos extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(tablaProductos);
+        if (tablaProductos.getColumnModel().getColumnCount() > 0) {
+            tablaProductos.getColumnModel().getColumn(0).setResizable(false);
+            tablaProductos.getColumnModel().getColumn(1).setResizable(false);
+            tablaProductos.getColumnModel().getColumn(2).setResizable(false);
+            tablaProductos.getColumnModel().getColumn(3).setResizable(false);
+        }
+
+        txtBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtBuscarKeyReleased(evt);
+            }
+        });
 
         jLabel6.setText("Cantidad");
 
@@ -190,6 +234,61 @@ public class FormProductos extends javax.swing.JFrame {
     private void txtCantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCantidadActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCantidadActionPerformed
+
+    private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
+        // TODO add your handling code here:
+        String codigo = txtCodigo.getText().trim();
+        String nombre = txtNombre.getText().trim();
+        String cantidadTxt = txtCantidad.getText().trim();
+        String precioTxt = txtPrecio.getText().trim().replace(',', '.');
+
+        // 1. Campos vacíos
+        if (codigo.isEmpty() || nombre.isEmpty() || cantidadTxt.isEmpty() || precioTxt.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Complete todos los campos");
+            return;
+        }
+
+        // 2. Cantidad y precio deben ser números válidos
+        int cantidad;
+        float precio;
+        try {
+            cantidad = Integer.parseInt(cantidadTxt);
+            precio = Float.parseFloat(precioTxt);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Cantidad y precio deben ser números");
+            return;
+        }
+
+        if (cantidad < 0 || precio <= 0) {
+            JOptionPane.showMessageDialog(this, "La cantidad no puede ser negativa y el precio debe ser mayor a 0");
+            return;
+        }
+
+        // 3. Crear el objeto y guardarlo
+        Producto producto = new Producto(codigo, nombre, cantidad, precio);
+
+        if (productoDAO.insertar(producto)) {
+            JOptionPane.showMessageDialog(this, "Producto guardado correctamente");
+            limpiarCampos();
+            cargarTabla();
+        } else {
+            JOptionPane.showMessageDialog(this, "No se pudo guardar. Verifique que el código no esté repetido");
+        }
+        
+    }//GEN-LAST:event_btnConfirmarActionPerformed
+
+    private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyReleased
+
+        String texto = txtBuscar.getText().trim();
+
+        if (texto.isEmpty()) {
+            cargarTabla();
+        } else {
+            mostrarEnTabla(productoDAO.buscar(texto));
+        }
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBuscarKeyReleased
 
     /**
      * @param args the command line arguments
