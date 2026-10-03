@@ -96,7 +96,7 @@ public class FormProducto extends javax.swing.JFrame {
         btnLimpiar = new javax.swing.JButton();
         btnConfirmar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel3.setText("Codigo");
 
@@ -133,7 +133,7 @@ public class FormProducto extends javax.swing.JFrame {
         txtCodigo.setEnabled(false);
 
         lblTitulo.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
-        lblTitulo.setText("Ingreso de productos");
+        lblTitulo.setText("Ingreso de producto");
 
         jLabel6.setText("Cantidad");
 
@@ -196,7 +196,7 @@ public class FormProducto extends javax.swing.JFrame {
                 .addGroup(layout.createSequentialGroup()
                     .addGap(117, 117, 117)
                     .addComponent(lblTitulo)
-                    .addContainerGap(78, Short.MAX_VALUE)))
+                    .addContainerGap(91, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

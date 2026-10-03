@@ -33,3 +33,24 @@ INSERT INTO productos (codigo, nombre, categoria, cantidad, precio, socket_puert
 -- 5. Inserción de un usuario inicial para pruebas
 INSERT INTO usuarios (usuario, password) 
 VALUES ('computel_app', 'Computel123');
+
+
+CREATE TABLE IF NOT EXISTS ventas (
+    numero_factura VARCHAR(20) PRIMARY KEY,
+    fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
+    subtotal DECIMAL(10,2) NOT NULL,
+    iva DECIMAL(10,2) NOT NULL,
+    descuento DECIMAL(10,2) DEFAULT 0.00,
+    total DECIMAL(10,2) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS detalle_ventas (
+    id_detalle INT AUTO_INCREMENT PRIMARY KEY,
+    numero_factura VARCHAR(20) NOT NULL,
+    codigo_producto VARCHAR(50) NOT NULL,
+    cantidad INT NOT NULL,
+    precio_unitario DECIMAL(10,2) NOT NULL,
+    subtotal DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY (numero_factura) REFERENCES ventas(numero_factura) ON DELETE CASCADE,
+    FOREIGN KEY (codigo_producto) REFERENCES productos(codigo)
+);

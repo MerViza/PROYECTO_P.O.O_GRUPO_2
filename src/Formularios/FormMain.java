@@ -34,12 +34,16 @@ public class FormMain extends javax.swing.JFrame {
         jMenuProducto1 = new javax.swing.JMenuItem();
         jMenuProducto2 = new javax.swing.JMenuItem();
         menuInventario = new javax.swing.JMenu();
+        jMenuListado = new javax.swing.JMenuItem();
         menuVentas = new javax.swing.JMenu();
+        jMenuRegistroVenta = new javax.swing.JMenuItem();
         menuReportes = new javax.swing.JMenu();
+        jMenuListadoVenta = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         lblIcono.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblIcono.setIcon(new javax.swing.ImageIcon(getClass().getResource("/computel/Icono.png"))); // NOI18N
         lblIcono.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         lblIcono.setMaximumSize(new java.awt.Dimension(1008, 268));
 
@@ -67,12 +71,27 @@ public class FormMain extends javax.swing.JFrame {
                 menuInventarioMouseClicked(evt);
             }
         });
+
+        jMenuListado.setText("Listado de Productos");
+        jMenuListado.addActionListener(this::jMenuListadoActionPerformed);
+        menuInventario.add(jMenuListado);
+
         menuMain.add(menuInventario);
 
         menuVentas.setText("Ventas");
+
+        jMenuRegistroVenta.setText("REGISTRO DE VENTA");
+        jMenuRegistroVenta.addActionListener(this::jMenuRegistroVentaActionPerformed);
+        menuVentas.add(jMenuRegistroVenta);
+
         menuMain.add(menuVentas);
 
         menuReportes.setText("Reportes");
+
+        jMenuListadoVenta.setText("LISTADO DE VENTA");
+        jMenuListadoVenta.addActionListener(this::jMenuListadoVentaActionPerformed);
+        menuReportes.add(jMenuListadoVenta);
+
         menuMain.add(menuReportes);
 
         setJMenuBar(menuMain);
@@ -81,11 +100,11 @@ public class FormMain extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(lblIcono, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 685, Short.MAX_VALUE)
+            .addComponent(lblIcono, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(lblIcono, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 523, Short.MAX_VALUE)
+            .addComponent(lblIcono, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -99,12 +118,13 @@ public class FormMain extends javax.swing.JFrame {
 
     private void menuInventarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuInventarioMouseClicked
         
-        new FormInventarios().setVisible(true);
+       
         // TODO add your handling code here:
     }//GEN-LAST:event_menuInventarioMouseClicked
 
     private void jMenuProducto1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuProducto1ActionPerformed
         // TODO add your handling code here:
+        new FormProducto().setVisible(true);
         
     }//GEN-LAST:event_jMenuProducto1ActionPerformed
 
@@ -112,6 +132,22 @@ public class FormMain extends javax.swing.JFrame {
         // TODO add your handling code here:
         new FormProductos().setVisible(true);
     }//GEN-LAST:event_jMenuProducto2ActionPerformed
+
+    private void jMenuListadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuListadoActionPerformed
+        // TODO add your handling code here:
+         new FormInventarios().setVisible(true);
+    }//GEN-LAST:event_jMenuListadoActionPerformed
+
+    private void jMenuRegistroVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuRegistroVentaActionPerformed
+        // TODO add your handling code here:
+         new FormVentas().setVisible(true);
+    }//GEN-LAST:event_jMenuRegistroVentaActionPerformed
+
+    private void jMenuListadoVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuListadoVentaActionPerformed
+        // TODO add your handling code here:
+        new FormListadoVentas().setVisible(true);
+        
+    }//GEN-LAST:event_jMenuListadoVentaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -139,8 +175,11 @@ public class FormMain extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem jMenuListado;
+    private javax.swing.JMenuItem jMenuListadoVenta;
     private javax.swing.JMenuItem jMenuProducto1;
     private javax.swing.JMenuItem jMenuProducto2;
+    private javax.swing.JMenuItem jMenuRegistroVenta;
     private javax.swing.JLabel lblIcono;
     private javax.swing.JMenu menuInventario;
     private javax.swing.JMenuBar menuMain;

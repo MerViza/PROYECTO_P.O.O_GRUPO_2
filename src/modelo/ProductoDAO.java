@@ -59,39 +59,41 @@ public class ProductoDAO {
     }
 
     // 2. Actualizar producto
-    public boolean actualizar(Producto p) {
-        String sql = "UPDATE productos SET nombre = ?, tipo = ?, cantidad = ?, precio = ?, "
-                   + "socket_puerto = ?, anios_garantia = ? WHERE codigo = ?";
+    // 2. Actualizar producto
+public boolean actualizar(Producto p) {
+    // CAMBIO AQUÍ: 'categoria = ?' en lugar de 'tipo = ?'
+    String sql = "UPDATE productos SET nombre = ?, categoria = ?, cantidad = ?, precio = ?, "
+               + "socket_puerto = ?, anios_garantia = ? WHERE codigo = ?";
 
-        try (Connection con = ConexionBD.conectar()) {
-            if (con == null) return false;
-            try (PreparedStatement ps = con.prepareStatement(sql)) {
-                ps.setString(1, p.getNombre());
-                ps.setString(2, p.getCategoria());
-                ps.setInt(3, p.getCantidad());
-                ps.setDouble(4, p.getPrecio());
+    try (Connection con = ConexionBD.conectar()) {
+        if (con == null) return false;
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, p.getNombre());
+            ps.setString(2, p.getCategoria());
+            ps.setInt(3, p.getCantidad());
+            ps.setDouble(4, p.getPrecio());
 
-                if (p.getSocketPuerto() != null && !p.getSocketPuerto().isEmpty()) {
-                    ps.setString(5, p.getSocketPuerto());
-                } else {
-                    ps.setNull(5, Types.VARCHAR);
-                }
-
-                if (p.getAniosGarantia() != null) {
-                    ps.setInt(6, p.getAniosGarantia());
-                } else {
-                    ps.setNull(6, Types.INTEGER);
-                }
-
-                ps.setString(7, p.getCodigo());
-
-                return ps.executeUpdate() > 0;
+            if (p.getSocketPuerto() != null && !p.getSocketPuerto().isEmpty()) {
+                ps.setString(5, p.getSocketPuerto());
+            } else {
+                ps.setNull(5, Types.VARCHAR);
             }
-        } catch (SQLException e) {
-            System.out.println("Error al actualizar producto: " + e.getMessage());
-            return false;
+
+            if (p.getAniosGarantia() != null) {
+                ps.setInt(6, p.getAniosGarantia());
+            } else {
+                ps.setNull(6, Types.INTEGER);
+            }
+
+            ps.setString(7, p.getCodigo());
+
+            return ps.executeUpdate() > 0;
         }
+    } catch (SQLException e) {
+        System.out.println("Error al actualizar producto: " + e.getMessage());
+        return false;
     }
+}
 
     // 3. Eliminar producto
     public boolean eliminar(String codigo) {
@@ -115,51 +117,55 @@ public class ProductoDAO {
 
     // 5. Filtrar por categoría (RF-09) y/o búsqueda por texto
     public List<Producto> buscarOFiltrar(String texto, String categoria) {
-        List<Producto> lista = new ArrayList<>();
-        StringBuilder sql = new StringBuilder("SELECT codigo, nombre, tipo, cantidad, precio, socket_puerto, anios_garantia FROM productos WHERE 1=1");
+       List<Producto> lista = new ArrayList<>();
+    // SE CAMBIÓ 'tipo' POR 'categoria'
+    StringBuilder sql = new StringBuilder("SELECT codigo, nombre, categoria, cantidad, precio, socket_puerto, anios_garantia FROM productos WHERE 1=1");
 
-        if (texto != null && !texto.trim().isEmpty()) {
-            sql.append(" AND (codigo LIKE ? OR nombre LIKE ?)");
-        }
-        if (categoria != null && !categoria.equalsIgnoreCase("Todos")) {
-            sql.append(" AND tipo = ?");
-        }
-        sql.append(" ORDER BY nombre");
+    if (texto != null && !texto.trim().isEmpty()) {
+        sql.append(" AND (LOWER(codigo) LIKE LOWER(?) OR LOWER(nombre) LIKE LOWER(?))");
+    }
+    
+    // SE CAMBIÓ 'tipo = ?' POR 'categoria = ?'
+    if (categoria != null && !categoria.equalsIgnoreCase("Todo") && !categoria.equalsIgnoreCase("Todos")) {
+        sql.append(" AND categoria = ?");
+    }
+    
+    sql.append(" ORDER BY codigo");
 
-        try (Connection con = ConexionBD.conectar()) {
-            if (con == null) return lista;
-            try (PreparedStatement ps = con.prepareStatement(sql.toString())) {
-                int paramIndex = 1;
+    try (Connection con = ConexionBD.conectar()) {
+        if (con == null) return lista;
+        try (PreparedStatement ps = con.prepareStatement(sql.toString())) {
+            int paramIndex = 1;
 
-                if (texto != null && !texto.trim().isEmpty()) {
-                    String patron = "%" + texto + "%";
-                    ps.setString(paramIndex++, patron);
-                    ps.setString(paramIndex++, patron);
-                }
-                if (categoria != null && !categoria.equalsIgnoreCase("Todos")) {
-                    ps.setString(paramIndex++, categoria);
-                }
+            if (texto != null && !texto.trim().isEmpty()) {
+                String patron = "%" + texto.trim() + "%";
+                ps.setString(paramIndex++, patron);
+                ps.setString(paramIndex++, patron);
+            }
+            if (categoria != null && !categoria.equalsIgnoreCase("Todo") && !categoria.equalsIgnoreCase("Todos")) {
+                ps.setString(paramIndex++, categoria);
+            }
 
-                try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        Producto p = new Producto(
-                                rs.getString("codigo"),
-                                rs.getString("nombre"),
-                                rs.getString("tipo"),
-                                rs.getInt("cantidad"),
-                                rs.getFloat("precio"),
-                                rs.getString("socket_puerto"),
-                                (Integer) rs.getObject("anios_garantia")
-                        );
-                        lista.add(p);
-                    }
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Producto p = new Producto(
+                            rs.getString("codigo"),
+                            rs.getString("nombre"),
+                            rs.getString("categoria"), // 
+                            rs.getInt("cantidad"),
+                            rs.getFloat("precio"),
+                            rs.getString("socket_puerto"),
+                            (Integer) rs.getObject("anios_garantia")
+                    );
+                    lista.add(p);
                 }
             }
-        } catch (SQLException e) {
-            System.out.println("Error al consultar productos: " + e.getMessage());
         }
-        return lista;
+    } catch (SQLException e) {
+        System.out.println("Error al consultar productos: " + e.getMessage());
     }
+    return lista;
+}
 
     // 6. Verificar si un código ya existe
     public boolean existeCodigo(String codigo) {

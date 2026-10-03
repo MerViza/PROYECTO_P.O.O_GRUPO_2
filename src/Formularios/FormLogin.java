@@ -39,7 +39,7 @@ public class FormLogin extends javax.swing.JFrame {
         lblTitulo2 = new javax.swing.JLabel();
         txtContra = new javax.swing.JPasswordField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(12, 74, 163));
         setName("lblTitulo"); // NOI18N
 
