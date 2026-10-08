@@ -203,4 +203,48 @@ public boolean actualizar(Producto p) {
     }
     return maxNumero;
     }
+    
+    public List<Producto> listarBajoStock(int umbral, String categoria) {
+    List<Producto> lista = new ArrayList<>();
+    StringBuilder sql = new StringBuilder(
+            "SELECT codigo, nombre, categoria, cantidad, precio, socket_puerto, anios_garantia "
+          + "FROM productos WHERE cantidad < ?");
+
+    boolean filtrarCategoria = categoria != null
+            && !categoria.equalsIgnoreCase("Todos")
+            && !categoria.equalsIgnoreCase("Todo");
+    if (filtrarCategoria) {
+        sql.append(" AND categoria = ?");
+    }
+    sql.append(" ORDER BY cantidad ASC, nombre ASC");
+
+    try (Connection con = ConexionBD.conectar()) {
+        if (con == null) return lista;
+        try (PreparedStatement ps = con.prepareStatement(sql.toString())) {
+            ps.setInt(1, umbral);
+            if (filtrarCategoria) {
+                ps.setString(2, categoria);
+            }
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    lista.add(new Producto(
+                            rs.getString("codigo"),
+                            rs.getString("nombre"),
+                            rs.getString("categoria"),
+                            rs.getInt("cantidad"),
+                            rs.getFloat("precio"),
+                            rs.getString("socket_puerto"),
+                            (Integer) rs.getObject("anios_garantia")
+                    ));
+                }
+            }
+        }
+    } catch (SQLException e) {
+        System.out.println("Error al consultar bajo stock: " + e.getMessage());
+    }
+    return lista;
+}
+    
+    
+    
 }

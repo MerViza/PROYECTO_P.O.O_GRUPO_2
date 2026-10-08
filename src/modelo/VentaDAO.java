@@ -170,4 +170,43 @@ public List<DetalleVenta> obtenerDetallesPorFactura(String numeroFactura) {
     }
     return listaDetalle;
 }
+public List<ProductoVendido> obtenerMasVendidos(int limite) {
+    List<ProductoVendido> lista = new ArrayList<>();
+    String sql = "SELECT d.codigo_producto, p.nombre, "
+               + "SUM(d.cantidad) AS unidades, SUM(d.subtotal) AS monto "
+               + "FROM detalle_ventas d "
+               + "INNER JOIN productos p ON p.codigo = d.codigo_producto "
+               + "GROUP BY d.codigo_producto, p.nombre "
+               + "ORDER BY unidades DESC, monto DESC, p.nombre ASC";
+
+    if (limite > 0) {
+        sql += " LIMIT ?";
+    }
+
+    try (Connection con = ConexionBD.conectar()) {
+        if (con == null) return lista;
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            if (limite > 0) {
+                ps.setInt(1, limite);
+            }
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    lista.add(new ProductoVendido(
+                            rs.getString("codigo_producto"),
+                            rs.getString("nombre"),
+                            rs.getInt("unidades"),
+                            rs.getFloat("monto")
+                    ));
+                }
+            }
+        }
+    } catch (SQLException e) {
+        System.out.println("Error al consultar más vendidos: " + e.getMessage());
+    }
+    return lista;
+}
+
+
+
+
 }

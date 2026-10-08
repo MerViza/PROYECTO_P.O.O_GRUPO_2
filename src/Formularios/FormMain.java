@@ -39,6 +39,8 @@ public class FormMain extends javax.swing.JFrame {
         jMenuRegistroVenta = new javax.swing.JMenuItem();
         menuReportes = new javax.swing.JMenu();
         jMenuListadoVenta = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -87,10 +89,19 @@ public class FormMain extends javax.swing.JFrame {
         menuMain.add(menuVentas);
 
         menuReportes.setText("Reportes");
+        menuReportes.addActionListener(this::menuReportesActionPerformed);
 
         jMenuListadoVenta.setText("LISTADO DE VENTA");
         jMenuListadoVenta.addActionListener(this::jMenuListadoVentaActionPerformed);
         menuReportes.add(jMenuListadoVenta);
+
+        jMenuItem1.setText("REPORTE BAJO STOCK");
+        jMenuItem1.addActionListener(this::jMenuItem1ActionPerformed);
+        menuReportes.add(jMenuItem1);
+
+        jMenuItem2.setText("REPORTE DE MAS VENDIDOS");
+        jMenuItem2.addActionListener(this::jMenuItem2ActionPerformed);
+        menuReportes.add(jMenuItem2);
 
         menuMain.add(menuReportes);
 
@@ -149,6 +160,23 @@ public class FormMain extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jMenuListadoVentaActionPerformed
 
+    private void menuReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuReportesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_menuReportesActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        
+        new FormReporteBajoStock().setVisible(true);
+    // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+
+        new FormReporteMasVendidos().setVisible(true);
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -175,6 +203,8 @@ public class FormMain extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuListado;
     private javax.swing.JMenuItem jMenuListadoVenta;
     private javax.swing.JMenuItem jMenuProducto1;
