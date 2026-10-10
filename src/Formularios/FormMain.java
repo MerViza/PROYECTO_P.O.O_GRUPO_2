@@ -135,28 +135,28 @@ public class FormMain extends javax.swing.JFrame {
 
     private void jMenuProducto1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuProducto1ActionPerformed
         // TODO add your handling code here:
-        new FormProducto().setVisible(true);
+       abrirBloqueando(new FormProducto());
         
     }//GEN-LAST:event_jMenuProducto1ActionPerformed
 
     private void jMenuProducto2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuProducto2ActionPerformed
         // TODO add your handling code here:
-        new FormProductos().setVisible(true);
+        abrirBloqueando(new FormProductos());
     }//GEN-LAST:event_jMenuProducto2ActionPerformed
 
     private void jMenuListadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuListadoActionPerformed
         // TODO add your handling code here:
-         new FormInventarios().setVisible(true);
+         abrirBloqueando(new FormInventarios());
     }//GEN-LAST:event_jMenuListadoActionPerformed
 
     private void jMenuRegistroVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuRegistroVentaActionPerformed
         // TODO add your handling code here:
-         new FormVentas().setVisible(true);
+         abrirBloqueando(new FormVentas());
     }//GEN-LAST:event_jMenuRegistroVentaActionPerformed
 
     private void jMenuListadoVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuListadoVentaActionPerformed
         // TODO add your handling code here:
-        new FormListadoVentas().setVisible(true);
+        abrirBloqueando(new FormListadoVentas());
         
     }//GEN-LAST:event_jMenuListadoVentaActionPerformed
 
@@ -166,13 +166,13 @@ public class FormMain extends javax.swing.JFrame {
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         
-        new FormReporteBajoStock().setVisible(true);
+        abrirBloqueando(new FormReporteBajoStock());
     // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
 
-        new FormReporteMasVendidos().setVisible(true);
+        abrirBloqueando(new FormReporteMasVendidos());
 
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem2ActionPerformed
@@ -201,6 +201,18 @@ public class FormMain extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new FormMain().setVisible(true));
     }
+    
+    private void abrirBloqueando(javax.swing.JFrame ventana) {
+    this.setEnabled(false); // bloquea FormMain
+    ventana.addWindowListener(new java.awt.event.WindowAdapter() {
+        @Override
+        public void windowClosed(java.awt.event.WindowEvent e) {
+            FormMain.this.setEnabled(true);
+            FormMain.this.toFront();
+        }
+    });
+    ventana.setVisible(true);
+}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem jMenuItem1;
